@@ -8,7 +8,7 @@ class Task:
     _id: int
     _description: str
     _status: TaskStatus
-    created_at: datetime
+    _created_at: datetime
     updated_at: datetime
 
     @property
@@ -47,11 +47,15 @@ class Task:
 
         self._status = value
 
+    @property
+    def created_at(self) -> datetime:
+        return self._created_at
+
     def __init__(self: Task, id: int, description: str): 
         self.id = id
         self.description = description
         self.status = TaskStatus.TODO
 
         utc_now: datetime = datetime.now(timezone.utc)
-        self.created_at = utc_now
+        self._created_at = utc_now
         self.updated_at = utc_now
