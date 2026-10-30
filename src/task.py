@@ -9,7 +9,7 @@ class Task:
     _description: str
     _status: TaskStatus
     _created_at: datetime
-    updated_at: datetime
+    _updated_at: datetime
 
     @property
     def id(self) -> int:
@@ -51,6 +51,10 @@ class Task:
     def created_at(self) -> datetime:
         return self._created_at
 
+    @property
+    def updated_at(self) -> datetime:
+        return self._updated_at
+
     def __init__(self: Task, id: int, description: str): 
         self.id = id
         self.description = description
@@ -58,4 +62,4 @@ class Task:
 
         utc_now: datetime = datetime.now(timezone.utc)
         self._created_at = utc_now
-        self.updated_at = utc_now
+        self._updated_at = utc_now
