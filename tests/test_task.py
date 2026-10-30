@@ -1,5 +1,6 @@
 import unittest
 from src.task import Task
+from src.task_status import TaskStatus
 
 
 class TestTaskInit(unittest.TestCase):
@@ -34,3 +35,7 @@ class TestTaskInit(unittest.TestCase):
         description = 'Test Description'
         task = Task(1, description)
         self.assertEqual(task.description, description)
+
+    def test_valid_initial_status(self):
+        task = Task(1, 'Test task')
+        self.assertEqual(task.status, TaskStatus.TODO)
