@@ -7,7 +7,7 @@ from src.utils import validate_type
 class Task:
     _id: int
     _description: str
-    status: TaskStatus
+    _status: TaskStatus
     created_at: datetime
     updated_at: datetime
 
@@ -17,10 +17,10 @@ class Task:
 
     @id.setter
     def id(self, value: int):
-        validate_type('id', value, int)
+        validate_type('Id', value, int)
         
         if value <= 0:
-            raise ValueError('id must be a positive integer.')
+            raise ValueError('Id must be a positive integer.')
 
         self._id = value
 
@@ -30,12 +30,22 @@ class Task:
 
     @description.setter
     def description(self, value: str):
-        validate_type('description', value, str)
+        validate_type('Description', value, str)
 
         if len(value) == 0:
             raise ValueError('No description provided.')
         
         self._description = value
+
+    @property
+    def status(self) -> TaskStatus:
+        return self._status
+
+    @status.setter
+    def status(self, value: TaskStatus):
+        validate_type('Status', value, TaskStatus)
+
+        self._status = value
 
     def __init__(self: Task, id: int, description: str): 
         self.id = id
