@@ -38,4 +38,4 @@ class TestTaskInit(unittest.TestCase):
 
     def test_valid_initial_status(self):
         task = Task(1, 'Test task')
-        self.assertEqual(task.status, TaskStatus.TODO)
+        self.assertEqual(task.status, TaskStatus.TODO)    

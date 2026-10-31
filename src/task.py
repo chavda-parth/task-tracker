@@ -18,15 +18,6 @@ class Task:
     def id(self) -> int:
         return self._id
 
-    @id.setter
-    def id(self, value: int):
-        validate_type('Id', value, int)
-        
-        if value <= 0:
-            raise ValueError('Id must be a positive integer.')
-
-        self._id = value
-
     @property
     def description(self) -> str:
         return self._description
@@ -59,7 +50,7 @@ class Task:
         return self._updated_at
 
     def __init__(self, id: int, description: str): 
-        self.id = id
+        self._id = self._validate_task_id(id)
         self.description = description
         self.status = TaskStatus.TODO
 
@@ -107,4 +98,12 @@ class Task:
             'created_at': self.created_at.isoformat(),
             'updated_at': self.updated_at.isoformat()
         })
-        
+
+    def _validate_task_id(self, value: int) -> int:
+        if not isinstance(value, int) or isinstance(value, bool):
+            raise TypeError(f'Id must be of type int, got {type(value).__name__}')
+
+        if value <= 0:
+            raise ValueError('Id must be a positive integer.')
+
+        return value
