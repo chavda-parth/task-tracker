@@ -16,12 +16,9 @@ class TestTaskInit(unittest.TestCase):
                 with self.assertRaises(ValueError):
                     Task(bad_value, 'Value Error Test Task')
 
-    def test_valid_id(self):
-        class SubInt(int):
-            val: int = 284
-        
+    def test_valid_id(self):        
         description = 'Valid Id Test Task'
-        for valid_id in (1, 2, 42, 1018, SubInt().val):
+        for valid_id in (1, 2, 42, 1018):
             with self.subTest(id = valid_id):
                 task = Task(valid_id, description)
                 self.assertEqual(task.id, valid_id)
