@@ -99,7 +99,8 @@ class Task:
             'updated_at': self.updated_at.isoformat()
         })
 
-    def _validate_task_id(self, value: int) -> int:
+    @staticmethod
+    def _validate_task_id(value: int) -> int:
         if not isinstance(value, int) or isinstance(value, bool):
             raise TypeError(f'Id must be of type int, got {type(value).__name__}')
 
