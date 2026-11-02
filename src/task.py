@@ -22,24 +22,9 @@ class Task:
     def description(self) -> str:
         return self._description
 
-    @description.setter
-    def description(self, value: str):
-        validate_type('Description', value, str)
-
-        if len(value) == 0:
-            raise ValueError('No description provided.')
-        
-        self._description = value
-
     @property
     def status(self) -> TaskStatus:
         return self._status
-
-    @status.setter
-    def status(self, value: TaskStatus):
-        validate_type('Status', value, TaskStatus)
-
-        self._status = value
 
     @property
     def created_at(self) -> datetime:
@@ -50,13 +35,11 @@ class Task:
         return self._updated_at
 
     def __init__(self, id: int, description: str): 
-        self._id = self._validate_task_id(id)
-        self.description = description
-        self.status = TaskStatus.TODO
-
-        utc_now: datetime = datetime.now(timezone.utc)
-        self._created_at = utc_now
-        self._updated_at = utc_now
+        self._id = Task._validate_task_id(id)
+        self._description = Task._validate_task_description(description) 
+        self._status = TaskStatus.TODO
+        self._created_at = Task._get_utc_now()
+        self._updated_at = self._created_at
 
     @classmethod
     def from_json(cls, json_string: str) -> Self:
@@ -85,7 +68,7 @@ class Task:
             data['id'], 
             data['description']
         )
-        task.status = TaskStatus(data['status'])
+        task._status = TaskStatus(data['status'])
         task._created_at = task_created_at
         task._updated_at = task_updated_at
         return task
@@ -108,3 +91,29 @@ class Task:
             raise ValueError('Id must be a positive integer.')
 
         return value
+
+    @staticmethod
+    def _validate_task_description(value: str) -> str:
+        if not isinstance(value, str):
+            raise TypeError(f'Description must be of type str, got {type(value).__name__}')
+
+        if len(value) == 0 or value.isspace():
+            raise ValueError('Description cannot be empty.')
+
+        return value        
+
+    @staticmethod
+    def _get_utc_now() -> datetime:
+        return datetime.now(timezone.utc)
+
+    def update_description(self, value: str):
+        new_value = Task._validate_task_description(value)
+        self._description = new_value
+        self._updated_at = Task._get_utc_now()
+
+    def update_status(self, value: TaskStatus):
+        # TODO: Add validation method to check value
+        new_value = value
+        if new_value != self._status:
+            self._status = new_value
+            self._updated_at = Task._get_utc_now()

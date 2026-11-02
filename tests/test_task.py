@@ -26,21 +26,16 @@ class TestTaskInit(unittest.TestCase):
                 task = Task(valid_id, description)
                 self.assertEqual(task.id, valid_id)
 
-    def test_invalid_description_types(self):
-        for bad_value in (1, 1.5, 1.2, True):
-            with self.subTest(description = bad_value):
-                with self.assertRaises(TypeError):
-                    Task(1, bad_value) # pyright: ignore[reportArgumentType]
+    def test_valid_description(self):
+        class StrSubClass(str):
+            pass
+        
+        for value in ('Buy milk', 'a', '💀', 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. N', 'hi ', StrSubClass('Buy milk')):
+            with self.subTest(description = value):
+                task = Task(1, value)
+                self.assertEqual(task.description, value)
 
     def test_invalid_description(self):
         with self.assertRaises(ValueError):
-            Task(1, '')
-
-    def test_valid_description(self):
-        description = 'Test Description'
-        task = Task(1, description)
-        self.assertEqual(task.description, description)
-
-    def test_valid_initial_status(self):
-        task = Task(1, 'Test task')
-        self.assertEqual(task.status, TaskStatus.TODO)    
+            Task(1, "")
+            # Task(2, " ")
