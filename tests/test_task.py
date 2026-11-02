@@ -40,3 +40,9 @@ class TestTaskInit(unittest.TestCase):
             with self.subTest(description = value):
                 with self.assertRaises(ValueError):
                     Task(1, value)
+
+    def test_invalid_description_types(self):
+        for value in  (1, 1.2, True, False, None, [1], (1,), {1:1}, b"1", 1+0j):
+            with self.subTest(description = value):
+                with self.assertRaises(TypeError):
+                    Task(1, value) # pyright: ignore[reportArgumentType]
