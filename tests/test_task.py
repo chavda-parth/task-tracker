@@ -38,4 +38,4 @@ class TestTaskInit(unittest.TestCase):
     def test_invalid_description(self):
         with self.assertRaises(ValueError):
             Task(1, "")
-            # Task(2, " ")
+            Task(2, " ")
