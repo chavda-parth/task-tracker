@@ -36,6 +36,7 @@ class TestTaskInit(unittest.TestCase):
                 self.assertEqual(task.description, value)
 
     def test_invalid_description(self):
-        with self.assertRaises(ValueError):
-            Task(1, "")
-            Task(2, " ")
+        for value in ('', ' '):
+            with self.subTest(description = value):
+                with self.assertRaises(ValueError):
+                    Task(1, value)
