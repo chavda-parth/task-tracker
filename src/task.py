@@ -8,15 +8,15 @@ from src.utils import validate_type
 
 
 class Task:
-    _id: int
+    _task_id: int
     _description: str
     _status: TaskStatus
     _created_at: datetime
     _updated_at: datetime
 
     @property
-    def id(self) -> int:
-        return self._id
+    def task_id(self) -> int:
+        return self._task_id
 
     @property
     def description(self) -> str:
@@ -34,48 +34,54 @@ class Task:
     def updated_at(self) -> datetime:
         return self._updated_at
 
-    def __init__(self, id: int, description: str): 
-        self._id = Task._validate_task_id(id)
+    def __init__(
+        self, 
+        task_id: int, 
+        description: str,
+        status: TaskStatus = TaskStatus.TODO,
+        created_at: datetime | None = None,
+        updated_at: datetime | None = None,
+    ): 
+        now: datetime = Task._get_utc_now()
+        self._task_id = Task._validate_task_id(task_id)
         self._description = Task._validate_task_description(description) 
-        self._status = TaskStatus.TODO
-        self._created_at = Task._get_utc_now()
-        self._updated_at = self._created_at
+        self._status = status
+        self._created_at = created_at or now
+        self._updated_at = updated_at or self.created_at
 
-    @classmethod
-    def from_json(cls, json_string: str) -> Self:
-        data = json.loads(json_string)
-
-        validate_type('Data', data, dict)
-
-        required = {
-            'id',
-            'description',
-            'status',
-            'created_at',
-            'updated_at'
-        }
-
-        if required - data.keys():
-            raise ValueError('Corrupt or Invalid json.')
-
-        task_created_at = datetime.fromisoformat(data['created_at'])
-        task_updated_at = datetime.fromisoformat(data['updated_at'])
-
-        if task_updated_at < task_created_at:
-            raise ValueError('Invalid task metadata.')
+    # @classmethod
+    # def from_json(cls, json_string: str) -> Self:
+    #     data = json.loads(json_string)
         
-        task = cls(
-            data['id'], 
-            data['description']
-        )
-        task._status = TaskStatus(data['status'])
-        task._created_at = task_created_at
-        task._updated_at = task_updated_at
-        return task
+    #     required = {
+    #         'task_id',
+    #         'description',
+    #         'status',
+    #         'created_at',
+    #         'updated_at'
+    #     }
+
+    #     if required - data.keys():
+    #         raise ValueError('Corrupt or Invalid json.')
+
+    #     task_created_at = datetime.fromisoformat(data['created_at'])
+    #     task_updated_at = datetime.fromisoformat(data['updated_at'])
+
+    #     if task_updated_at < task_created_at:
+    #         raise ValueError('Invalid task metadata.')
+        
+    #     task = cls(
+    #         data['id'], 
+    #         data['description']
+    #     )
+    #     task._status = TaskStatus(data['status'])
+    #     task._created_at = task_created_at
+    #     task._updated_at = task_updated_at
+    #     return task
 
     def to_json(self) -> str:
         return json.dumps({
-            'id': self.id,
+            'task_id': self.task_id,
             'description': self.description,
             'status': self.status.value,
             'created_at': self.created_at.isoformat(),

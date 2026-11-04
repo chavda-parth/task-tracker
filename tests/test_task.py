@@ -24,7 +24,7 @@ class TestTaskInit(unittest.TestCase):
         for valid_id in (1, 2, 42, 1018, SubInt(42)):
             with self.subTest(id = valid_id):
                 task = Task(valid_id, description)
-                self.assertEqual(task.id, valid_id)
+                self.assertEqual(task.task_id, valid_id)
 
     def test_valid_description(self):
         class StrSubClass(str):
