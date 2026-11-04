@@ -46,3 +46,15 @@ class TestTaskInit(unittest.TestCase):
             with self.subTest(description = value):
                 with self.assertRaises(TypeError):
                     Task(1, value) # pyright: ignore[reportArgumentType]
+
+    def test_valid_initial_status(self):
+        task = Task(1, 'Test task')
+
+        for value in ('to-do', TaskStatus.TODO):
+            with self.subTest(status = value):
+                self.assertEqual(task.status, value)
+
+    def test_valid_initial_timestamp(self):
+        task = Task(1, 'Test task')
+
+        self.assertEqual(task.created_at, task.updated_at)

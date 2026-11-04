@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class TaskStatus(Enum):
-    TODO = 'todo'
+class TaskStatus(StrEnum):
+    TODO = 'to-do'
     IN_PROGRESS = 'in-progress'
     DONE = 'done'
